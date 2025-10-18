@@ -90,9 +90,7 @@ const Pipeline = struct {
             return out;
         }
 
-        const outFile = try std.fs.cwd().openFile(paths[1], .{
-            .mode = .write_only,
-        });
+        const outFile = try std.fs.cwd().createFile(paths[1], .{});
         errdefer outFile.close();
         out.output = outFile.writer(outBuff);
 
