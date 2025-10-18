@@ -55,7 +55,7 @@ def outputRules(file=None):
     print("// generated at", datetime.now().isoformat(), file=file)
 
     # actual zig stuff
-    print("public const RuleShorthand = [_][]const u8{", file=file)
+    print("pub const RuleShorthand = [_][]const u8{", file=file)
     for rule in rules:
         print(f"    \"{rule}\",", file=file)
     print("};", file=file)
