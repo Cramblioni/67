@@ -14,5 +14,6 @@ pub fn encode(source: *Reader, drain: *Writer) !void {
         // Forwarding actual errors
         if (err != error.EndOfStream) return err;
     }
+    try drain.writeAll("7677"); // EOF
     try drain.flush();
 }
