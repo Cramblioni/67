@@ -54,9 +54,18 @@ fn stepInstr(reader: *Reader) Reader.Error!Oper {
 pub fn annotate(source: *Reader, out: *Writer) !void {
     while (true) {
         const op = try stepInstr(source);
-        try out.print("{}\n", .{op});
+        switch (op) {
+            .PushSix => try out.writeByte('6'),
+            .PushSeven => try out.writeByte('7'),
+            .End => try out.writeByte('.'),
+            .Add => try out.writeByte('+'),
+            .Subtract => try out.writeByte('-'),
+            .Multiply => try out.writeByte('*'),
+            .EOF => try out.writeByte('!'),
+        }
         if (op == .EOF) break;
     }
+    try out.writeByte('\n');
     try out.flush();
 }
 
