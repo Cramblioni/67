@@ -4,8 +4,20 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    // Creating the decoder module
     const mod_dec = b.addModule("dec", .{
         .root_source_file = b.path("src/dec.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    // Creating the ruleset
+    const gen_ruleset = b.addSystemCommand(&.{"python3"});
+    gen_ruleset.addFileArg(b.path("src/rulegen.py"));
+
+    // Creating the encoder module
+    const mod_enc = b.addModule("enc", .{
+        .root_source_file = b.path("src/enc.zig"),
         .target = target,
         .optimize = optimize,
     });
@@ -18,10 +30,12 @@ pub fn build(b: *std.Build) void {
             .optimize = optimize,
             .imports = &.{
                 .{ .name = "dec", .module = mod_dec },
+                .{ .name = "enc", .module = mod_enc },
             },
         }),
     });
 
+    exe.step.dependOn(&gen_ruleset.step);
     b.installArtifact(exe);
 
     // From `zig init`
