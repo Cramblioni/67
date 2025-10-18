@@ -1,5 +1,6 @@
 const std = @import("std");
 const dec = @import("dec");
+const enc = @import("enc");
 
 // The CLI stuff
 
@@ -17,7 +18,10 @@ pub fn main() !void {
     const args = try std.process.argsAlloc(std.heap.smp_allocator);
     defer std.process.argsFree(std.heap.smp_allocator, args);
 
-    if (args.len == 1) try onEncode(args[1..]); // Special case
+    if (args.len == 1) { // special case
+        try onEncode(args[1..]);
+        return;
+    }
     if (args.len < 2) { // minimum n of args is ~2
         onInvalid();
     }
@@ -27,9 +31,13 @@ pub fn main() !void {
 }
 
 fn onEncode(args: []const []const u8) !void {
-    _ = args;
-    std.log.err("Encoding is not implemented yet :)", .{});
-    return;
+    var pipeline = try Pipeline.get(args);
+    defer pipeline.deinit();
+
+    try enc.encode(
+        &pipeline.input.interface,
+        &pipeline.output.interface,
+    );
 }
 
 fn onDecode(args: []const []const u8) !void {
