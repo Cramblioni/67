@@ -5,5 +5,13 @@ packaged with an encoder and decoder.
 
 ## TODO
 
-- [ ] Encoder
+- [X] Encoder
 - [X] Decoder
+- [ ] Understandable system
+    - [ ] make the code more DRY
+    - [ ] seperate internal format from 67 representation
+- [ ] Explain it better
+    - [ ] explain internal code model
+    - [ ] explain the greedy-prefixing format
+    - [ ] you should really not take this seriously
+    - [ ] Demos and stuff
